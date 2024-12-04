@@ -31,6 +31,7 @@ public class SocialMediaController {
         app.get("/messages", this::getAllMessagesHandler);
         app.get("/messages/{message_id}", this::getMessageById);
         app.post("/messages", this::postMessageHandler);
+        app.patch("/messages/{message_id}", this::updateMessageHandler);
         return app;
     }
 
@@ -45,6 +46,7 @@ public class SocialMediaController {
     private void postMessageHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(ctx.body(), Message.class);
+        // TODO: check if message was sent by user in db
         if (message.getMessage_text().length() > 0 && message.getMessage_text().length() < 255){
             Message addedMessage = messageService.addMessage(message);
             ctx.json(mapper.writeValueAsString(addedMessage));
@@ -52,6 +54,18 @@ public class SocialMediaController {
             ctx.status(400);
         }
         
+    }
+
+    private void updateMessageHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(ctx.body(), Message.class);
+        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+        if (message.getMessage_text().length() > 0 && message.getMessage_text().length() < 255 && messageService.getMessageById(message_id) != null){
+            Message updatedMessage = messageService.updateMessage(message_id, message);
+            ctx.json(mapper.writeValueAsString(updatedMessage));
+        } else {    
+            ctx.status(400);
+        }
     }
 
     private void getAllMessagesHandler(Context ctx){
