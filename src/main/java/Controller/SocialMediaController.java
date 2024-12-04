@@ -30,6 +30,7 @@ public class SocialMediaController {
         app.get("example-endpoint", this::exampleHandler);
         app.get("/messages", this::getAllMessagesHandler);
         app.get("/messages/{message_id}", this::getMessageById);
+        app.post("/messages", this::postMessageHandler);
         return app;
     }
 
@@ -39,6 +40,18 @@ public class SocialMediaController {
      */
     private void exampleHandler(Context context) {
         context.json("sample text");
+    }
+
+    private void postMessageHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(ctx.body(), Message.class);
+        if (message.getMessage_text().length() > 0 && message.getMessage_text().length() < 255){
+            Message addedMessage = messageService.addMessage(message);
+            ctx.json(mapper.writeValueAsString(addedMessage));
+        } else {    
+            ctx.status(400);
+        }
+        
     }
 
     private void getAllMessagesHandler(Context ctx){
@@ -53,7 +66,6 @@ public class SocialMediaController {
         if (fetchedMessage != null){
             ctx.json(mapper.writeValueAsString(fetchedMessage));
         }
-        
     }
 
 }

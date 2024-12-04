@@ -23,13 +23,18 @@ public class MessageService {
         this.messageDAO = messageDAO;
     }
 
+    public Message addMessage(Message message){
+        Message returnMessage = messageDAO.insertMessage(message);
+        return returnMessage;
+    }
+
 
     public List<Message> getAllMessages() {
         return messageDAO.getAllMessages();
     }
 
-    public Message getMessageById(int flight_id) {
-        return messageDAO.getMessageById(flight_id);
+    public Message getMessageById(int message_id) {
+        return messageDAO.getMessageById(message_id);
     }
 
 
