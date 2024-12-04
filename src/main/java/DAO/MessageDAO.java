@@ -9,6 +9,10 @@ import java.util.List;
 
 public class MessageDAO {
 
+    /**
+     * Insert into message table a new message
+     * @param message The message object contains the posted_by, message_text, and time_posted_epoch for a new message
+     */
     public Message insertMessage(Message message){
         Connection connection = ConnectionUtil.getConnection();
         try {
@@ -24,12 +28,17 @@ public class MessageDAO {
                 int generated_message_id = (int) pkeyResultSet.getLong(1);
                 return new Message(generated_message_id, message.getPosted_by(), message.getMessage_text(), message.getTime_posted_epoch());
             }
-        }catch(SQLException e){
+        } catch(SQLException e){
             System.out.println(e.getMessage());
         }
         return null;
     }
 
+    /**
+     * Update message text given a message_id
+     * @param id The message_id of a message to be updated
+     * @param message The message object that contains the updated message_text 
+     */
     public void updateMessage(int id, Message message){
         Connection connection = ConnectionUtil.getConnection();
         try {
@@ -40,11 +49,15 @@ public class MessageDAO {
 
             preparedStatement.executeUpdate();
             
-        }catch(SQLException e){
+        } catch(SQLException e){
             System.out.println(e.getMessage());
         }
     }
 
+    /**
+     * Remove a message from the table given a message_id
+     * @param id The message_id of the message to be deleted
+     */
     public void deleteMessage(int id){
         Connection connection = ConnectionUtil.getConnection();
         try {
@@ -53,11 +66,14 @@ public class MessageDAO {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
             
-        }catch(SQLException e){
+        } catch(SQLException e){
             System.out.println(e.getMessage());
         }
     }
 
+    /**
+     * Select all messages from message table
+     */
     public List<Message> getAllMessages(){
         Connection connection = ConnectionUtil.getConnection();
         List<Message> messages = new ArrayList<>();
@@ -71,12 +87,16 @@ public class MessageDAO {
                         rs.getString("message_text"), rs.getLong("time_posted_epoch"));
                 messages.add(message);
             }
-        }catch(SQLException e){
+        } catch(SQLException e){
             System.out.println(e.getMessage());
         }
         return messages;
     }
 
+    /**
+     * Get all messages from message table from an account, given posted_by
+     * @param posted_by The account_id of an account that is associated with messages
+     */
     public List<Message> getMessagesByAccount(int posted_by){
         Connection connection = ConnectionUtil.getConnection();
         List<Message> messages = new ArrayList<>();
@@ -91,12 +111,16 @@ public class MessageDAO {
                         rs.getString("message_text"), rs.getLong("time_posted_epoch"));
                 messages.add(message);
             }
-        }catch(SQLException e){
+        } catch(SQLException e){
             System.out.println(e.getMessage());
         }
         return messages;
     }
 
+    /**
+     * Get a message from message table given a message_id
+     * @param id The message_id of the message to be retrieved
+     */
     public Message getMessageById(int id){
         Connection connection = ConnectionUtil.getConnection();
         try {
