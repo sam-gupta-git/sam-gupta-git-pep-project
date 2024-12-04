@@ -138,7 +138,7 @@ public class SocialMediaController {
     }
 
     /**
-     * Handler for verifying a login given username and password
+     * Handler for verifying a login given username and password, return 401: forbidden if invalid login
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
     private void postAccountLoginHandler(Context ctx) throws JsonProcessingException {
