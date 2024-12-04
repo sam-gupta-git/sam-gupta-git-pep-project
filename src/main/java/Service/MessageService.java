@@ -12,20 +12,12 @@ public class MessageService {
         messageDAO = new MessageDAO();
     }
 
-    /**
-     * Constructor for a flightService when a flightDAO is provided.
-     * This is used for when a mock flightDAO that exhibits mock behavior is used in the test cases.
-     * This would allow the testing of FlightService independently of FlightDAO.
-     * There is no need to modify this constructor.
-     * @param flightDAO
-     */
     public MessageService(MessageDAO messageDAO){
         this.messageDAO = messageDAO;
     }
 
     public Message addMessage(Message message){
-        Message returnMessage = messageDAO.insertMessage(message);
-        return returnMessage;
+        return messageDAO.insertMessage(message);
     }
 
 
@@ -42,6 +34,15 @@ public class MessageService {
             messageDAO.updateMessage(message_id, message);
             Message updatedMessage = messageDAO.getMessageById(message_id);
             return updatedMessage;
+        }
+        return null;
+    }
+
+    public Message deleteMessage(int message_id) {
+        Message deletedMessage = messageDAO.getMessageById(message_id);
+        if (deletedMessage != null){
+            messageDAO.deleteMessage(message_id);
+            return deletedMessage;
         }
         return null;
     }

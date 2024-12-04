@@ -45,6 +45,19 @@ public class MessageDAO {
         }
     }
 
+    public void deleteMessage(int id){
+        Connection connection = ConnectionUtil.getConnection();
+        try {
+            String sql = "DELETE message WHERE message_id = ?" ;
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+            
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
     public List<Message> getAllMessages(){
         Connection connection = ConnectionUtil.getConnection();
         List<Message> messages = new ArrayList<>();
