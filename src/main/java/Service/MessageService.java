@@ -20,9 +20,12 @@ public class MessageService {
         return messageDAO.insertMessage(message);
     }
 
-
     public List<Message> getAllMessages() {
         return messageDAO.getAllMessages();
+    }
+
+    public List<Message> getMessagesByAccount(int posted_by) {
+        return messageDAO.getMessagesByAccount(posted_by);
     }
 
     public Message getMessageById(int message_id) {
