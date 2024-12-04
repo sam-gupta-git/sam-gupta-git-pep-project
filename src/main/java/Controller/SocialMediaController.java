@@ -1,7 +1,10 @@
 package Controller;
 
+import Model.Message;
 import Service.AccountService;
 import Service.MessageService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -26,6 +29,7 @@ public class SocialMediaController {
         Javalin app = Javalin.create();
         app.get("example-endpoint", this::exampleHandler);
         app.get("/messages", this::getAllMessagesHandler);
+        app.get("/messages/{message_id}", this::getMessageById);
         return app;
     }
 
@@ -39,6 +43,17 @@ public class SocialMediaController {
 
     private void getAllMessagesHandler(Context ctx){
         ctx.json(messageService.getAllMessages());
+    }
+
+    private void getMessageById(Context ctx) throws JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+        Message fetchedMessage = messageService.getMessageById(message_id);
+        System.out.println(fetchedMessage);
+        if (fetchedMessage != null){
+            ctx.json(mapper.writeValueAsString(fetchedMessage));
+        }
+        
     }
 
 }
